@@ -693,24 +693,89 @@
       <a href="https://youtube.com/@physicsgptofficial" class="btn btn-primary" target="_blank">Subscribe on YouTube</a>
     </div>
 
-    <!-- Simple email form -->
-    <div style="display:flex; gap:0; max-width:420px; margin:0 auto; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--deep);">
-      <input
-        type="email"
-        placeholder="your@email.com"
-        id="email-input"
-        style="flex:1; background:transparent; border:none; padding:14px 18px; color:var(--whisper); font-family:'DM Sans',sans-serif; font-size:14px; outline:none;"
-      />
-      <button
-        onclick="handleWaitlist()"
-        style="background:var(--signal); color:#fff; border:none; padding:14px 20px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; cursor:pointer; white-space:nowrap; transition:background 0.2s;"
-        onmouseover="this.style.background='#4a44cc'"
-        onmouseout="this.style.background='var(--signal)'"
-      >Join waitlist →</button>
+   <!-- Mailchimp Signup Form - PhysicsGPT -->
+<link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style>
+  #mc_embed_signup { background: transparent; clear: left; width: 100%; max-width: 420px; margin: 0 auto; font-family: 'DM Sans', sans-serif; }
+  #mc_embed_signup h2 { display: none; }
+  #mc_embed_signup .indicates-required { display: none; }
+  #mc_embed_signup .mc-field-group { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+  #mc_embed_signup .mc-field-group label { display: none; }
+  #mc_embed_signup .mc-field-group input[type="email"] {
+    background: var(--deep) !important;
+    border: 1px solid var(--border) !important;
+    border-right: none !important;
+    border-radius: 8px 0 0 8px !important;
+    color: var(--whisper) !important;
+    padding: 14px 18px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    width: 100% !important;
+    outline: none !important;
+  }
+  #mc_embed_signup .mc-field-group input[type="email"]:focus {
+    border-color: var(--signal) !important;
+  }
+  #mc_embed_signup .mc-field-group input::placeholder { color: #555566 !important; }
+  #mc_embed_signup .foot { display: flex !important; margin: 0 !important; padding: 0 !important; }
+  #mc-embedded-subscribe {
+    background: var(--signal) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 0 8px 8px 0 !important;
+    padding: 14px 20px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    transition: background 0.2s !important;
+    margin: 0 !important;
+    width: auto !important;
+  }
+  #mc-embedded-subscribe:hover { background: var(--signal-dim) !important; }
+  #mc_embed_signup .optionalParent p { display: none; }
+  #mce-error-response { color: #ff6b6b; font-size: 13px; margin-top: 10px; }
+  #mce-success-response { color: var(--spark); font-size: 13px; margin-top: 10px; }
+  #mc_embed_signup_scroll > div:first-child { display: flex; }
+</style>
+
+<div id="mc_embed_signup">
+  <form action="https://physicsgpt.us17.list-manage.com/subscribe/post?u=10af228c913652f847ee4ceab&amp;id=f7aac35c89&amp;f_id=0023c2e1f0"
+        method="post"
+        id="mc-embedded-subscribe-form"
+        name="mc-embedded-subscribe-form"
+        class="validate"
+        target="_blank">
+    <div id="mc_embed_signup_scroll">
+      <div class="mc-field-group">
+        <label for="mce-EMAIL">Email Address</label>
+        <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="your@email.com" required>
+      </div>
+      <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none;"></div>
+        <div class="response" id="mce-success-response" style="display:none;"></div>
+      </div>
+      <div aria-hidden="true" style="position:absolute; left:-5000px;">
+        <input type="text" name="b_10af228c913652f847ee4ceab_f7aac35c89" tabindex="-1" value="">
+      </div>
+      <div class="optionalParent">
+        <div class="clear foot">
+          <input type="submit" name="subscribe" id="mc-embedded-subscribe" value="Join waitlist →">
+        </div>
+      </div>
     </div>
-    <p id="waitlist-msg" style="margin-top:12px; font-size:13px; color:var(--spark); display:none;">You're on the list. We'll reach out before anyone else. ✓</p>
-  </div>
+  </form>
 </div>
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
+<script type="text/javascript">
+  (function($) {
+    window.fnames = new Array(); window.ftypes = new Array();
+    fnames[0]='EMAIL'; ftypes[0]='email';
+  }(jQuery));
+  var $mcj = jQuery.noConflict(true);
+</script>
+
 
 <!-- FOOTER -->
 <footer>
@@ -732,17 +797,6 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Waitlist
-  function handleWaitlist() {
-    const email = document.getElementById('email-input').value;
-    if (!email || !email.includes('@')) {
-      document.getElementById('email-input').style.borderColor = '#ff4444';
-      return;
-    }
-    document.getElementById('waitlist-msg').style.display = 'block';
-    document.getElementById('email-input').value = '';
-  }
-</script>
 
 </body>
 </html>
