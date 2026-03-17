@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhysicsGPT — JEE | NEET | AI-Powered Physics</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --void: #0A0A0F;
+    --deep: #1A1A2E;
+    --signal: #6C63FF;
+    --signal-dim: #4a44cc;
+    --whisper: #F4F3FF;
+    --spark: #00D4AA;
+    --spark-dim: #00a886;
+    --muted: #888899;
+    --border: rgba(108,99,255,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--whisper);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--whisper);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--signal); }
+
+  .nav-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--spark);
+    border: 1px solid rgba(0,212,170,0.3);
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--spark);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 9vw, 100px);
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.4s;
+  }
+
+  .hero-title .accent { color: var(--signal); }
+  .hero-title .spark  { color: var(--spark); }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.65;
+    margin-bottom: 48px;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.6s;
+  }
+
+  .hero-sub strong { color: var(--whisper); font-weight: 500; }
+
+  /* ── CTA BUTTONS ── */
+  .cta-group {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.8s;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 26px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--signal);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--signal-dim); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--whisper);
+    border: 1px solid rgba(244,243,255,0.2);
+  }
+  .btn-secondary:hover { border-color: rgba(244,243,255,0.5); transform: translateY(-1px); }
+
+  .btn-spark {
+    background: rgba(0,212,170,0.1);
+    color: var(--spark);
+    border: 1px solid rgba(0,212,170,0.3);
+  }
+  .btn-spark:hover { background: rgba(0,212,170,0.2); transform: translateY(-1px); }
+
+  /* ── GLOW ORBS ── */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb-1 { width: 500px; height: 500px; background: rgba(108,99,255,0.12); top: -100px; left: -150px; }
+  .orb-2 { width: 400px; height: 400px; background: rgba(0,212,170,0.08); bottom: 0; right: -100px; }
+
+  /* ── SECTION BASE ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--signal);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── JOURNEY / STATUS ── */
+  .status-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.2);
+    border-radius: 6px;
+    padding: 8px 14px;
+    margin-bottom: 40px;
+  }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--spark);
+    animation: pulse 2s ease infinite;
+  }
+
+  .status-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--spark);
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  .journey-intro {
+    font-size: 18px;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 48px;
+    font-weight: 300;
+    max-width: 700px;
+  }
+  .journey-intro strong { color: var(--whisper); font-weight: 500; }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--signal), rgba(108,99,255,0.1));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--signal);
+    background: var(--void);
+  }
+
+  .timeline-item.done::before {
+    background: var(--signal);
+    box-shadow: 0 0 8px rgba(108,99,255,0.5);
+  }
+
+  .timeline-item.now::before {
+    background: var(--spark);
+    border-color: var(--spark);
+    box-shadow: 0 0 12px rgba(0,212,170,0.6);
+    animation: pulse 2s ease infinite;
+  }
+
+  .timeline-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .tag-done { background: rgba(108,99,255,0.15); color: var(--signal); }
+  .tag-now  { background: rgba(0,212,170,0.15); color: var(--spark); }
+  .tag-soon { background: rgba(244,243,255,0.06); color: var(--muted); }
+
+  .timeline-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--whisper);
+    margin-bottom: 6px;
+  }
+
+  .timeline-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ── ROADMAP CARDS ── */
+  .roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .roadmap-card {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+
+  .roadmap-card:hover { border-color: rgba(108,99,255,0.4); }
+
+  .roadmap-month {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--signal);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .roadmap-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--whisper);
+    margin-bottom: 10px;
+  }
+
+  .roadmap-card ul {
+    list-style: none;
+  }
+
+  .roadmap-card ul li {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-weight: 300;
+  }
+
+  .roadmap-card ul li::before {
+    content: '→';
+    color: var(--signal);
+    flex-shrink: 0;
+    font-size: 12px;
+    margin-top: 1px;
+  }
+
+  /* ── WHAT WE'RE BUILDING ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .feature-card {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s;
+  }
+
+  .feature-card:hover {
+    border-color: rgba(0,212,170,0.3);
+    transform: translateY(-2px);
+  }
+
+  .feature-icon {
+    font-size: 24px;
+    margin-bottom: 14px;
+  }
+
+  .feature-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--whisper);
+    margin-bottom: 8px;
+  }
+
+  .feature-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    text-align: center;
+    padding: 100px 24px;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-section .section-title { margin-bottom: 16px; }
+
+  .cta-section p {
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 100%;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--muted);
+  }
+  .footer-logo span { color: var(--signal); }
+
+  .footer-text {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .hero-title { letter-spacing: -2px; }
+    footer { padding: 24px 20px; }
+    .cta-group { flex-direction: column; align-items: center; }
+    .btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>Physics</span>GPT</a>
+  <span class="nav-badge">Day 0 → Building live</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <p class="hero-eyebrow">JEE &nbsp;·&nbsp; NEET &nbsp;·&nbsp; AI-Powered Physics</p>
+
+  <h1 class="hero-title">
+    Physics.<br>
+    <span class="accent">No bullshit.</span><br>
+    <span class="spark">AI-first.</span>
+  </h1>
+
+  <p class="hero-sub">
+    We're building the <strong>smartest physics learning platform</strong> for JEE & NEET students in India — concept videos, an AI doubt solver, and a community that actually gets it.
+  </p>
+
+  <div class="cta-group">
+    <a href="https://t.me/physicsgptofficial" class="btn btn-spark" target="_blank">
+      → Join Telegram community
+    </a>
+    <a href="https://youtube.com/@physicsgptofficial" class="btn btn-primary" target="_blank">
+      Subscribe on YouTube
+    </a>
+    <a href="#waitlist" class="btn btn-secondary">
+      Join the waitlist
+    </a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- JOURNEY SECTION -->
+<section id="journey">
+  <div class="reveal">
+    <p class="section-label">Our journey</p>
+    <h2 class="section-title">We're starting from zero.<br>You can watch us build.</h2>
+  </div>
+
+  <div class="reveal" style="margin-top:32px;">
+    <div class="status-bar">
+      <div class="status-dot"></div>
+      <span class="status-text">Live now — Day 0 of PhysicsGPT</span>
+    </div>
+
+    <p class="journey-intro">
+      Right now, PhysicsGPT is <strong>two people and a Samsung Tab</strong>. Ishika teaches physics at one of India's top coaching institutes. Her brother is building the product. We're doing this in public — no funding, no team, no safety net. Just <strong>a clear vision and a refusal to make boring physics content</strong>.
+    </p>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline reveal">
+
+    <div class="timeline-item done">
+      <span class="timeline-tag tag-done">Done ✓</span>
+      <h3 class="timeline-title">Brand & identity built</h3>
+      <p class="timeline-desc">Logo, colors, YouTube banner, channel name — PhysicsGPT is a real brand now, not a side project.</p>
+    </div>
+
+    <div class="timeline-item done">
+      <span class="timeline-tag tag-done">Done ✓</span>
+      <h3 class="timeline-title">First video script written</h3>
+      <p class="timeline-desc">Newton's Third Law — why 90% of JEE students get it wrong. Hook, insight, PYQ, CTA. Ready to record.</p>
+    </div>
+
+    <div class="timeline-item now">
+      <span class="timeline-tag tag-now">Right now →</span>
+      <h3 class="timeline-title">Recording begins</h3>
+      <p class="timeline-desc">Ishika records video #1 this week. Dark board. S Pen. Hinglish. The way JEE physics should be taught.</p>
+    </div>
+
+    <div class="timeline-item">
+      <span class="timeline-tag tag-soon">Coming soon</span>
+      <h3 class="timeline-title">First video goes live</h3>
+      <p class="timeline-desc">YouTube + Telegram + this page. Subscribe now so you don't miss it.</p>
+    </div>
+
+    <div class="timeline-item">
+      <span class="timeline-tag tag-soon">Month 2</span>
+      <h3 class="timeline-title">AI doubt solver launches</h3>
+      <p class="timeline-desc">Type any JEE/NEET physics doubt. Get a step-by-step solution in Hinglish. Free tier available.</p>
+    </div>
+
+    <div class="timeline-item">
+      <span class="timeline-tag tag-soon">Month 3</span>
+      <h3 class="timeline-title">First paid cohort</h3>
+      <p class="timeline-desc">Live sessions + recorded content + AI tutor. Limited seats. Waitlist opens soon.</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHAT WE'RE BUILDING -->
+<section>
+  <div class="reveal">
+    <p class="section-label">What we're building</p>
+    <h2 class="section-title">More than a YouTube channel.</h2>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon">⚡</div>
+      <h3>Concept videos</h3>
+      <p>8–10 min videos on the exact concepts that trip JEE/NEET students. No fluff. Every video = one real insight.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🤖</div>
+      <h3>AI doubt solver</h3>
+      <p>Ask any physics question. Get a step-by-step solution in Hinglish, instantly. Powered by Claude AI.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🎯</div>
+      <h3>PYQ breakdowns</h3>
+      <p>Past year JEE & NEET questions solved the right way — with the actual reasoning, not just the answer.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🏠</div>
+      <h3>Community</h3>
+      <p>A Telegram group of serious JEE/NEET students. Daily doubts, tips, and honest advice. Zero spam.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROADMAP -->
+<section>
+  <div class="reveal">
+    <p class="section-label">90-day roadmap</p>
+    <h2 class="section-title">Here's the plan. We're not hiding it.</h2>
+  </div>
+
+  <div class="roadmap-grid">
+    <div class="roadmap-card reveal">
+      <p class="roadmap-month">Month 1 — Foundation</p>
+      <h3>Build the base</h3>
+      <ul>
+        <li>First 4 videos live on YouTube</li>
+        <li>Telegram community launched</li>
+        <li>physicsgpt.in goes live</li>
+        <li>Free mini-course drops</li>
+      </ul>
+    </div>
+    <div class="roadmap-card reveal">
+      <p class="roadmap-month">Month 2 — First product</p>
+      <h3>AI doubt solver</h3>
+      <ul>
+        <li>Free tier: 5 doubts/day</li>
+        <li>Paid tier: ₹299/month unlimited</li>
+        <li>12 videos on YouTube</li>
+        <li>500+ Telegram members</li>
+      </ul>
+    </div>
+    <div class="roadmap-card reveal">
+      <p class="roadmap-month">Month 3 — Revenue</p>
+      <h3>First paid cohort</h3>
+      <ul>
+        <li>Live cohort: ₹2,999–4,999</li>
+        <li>AI tutor included</li>
+        <li>Target: ₹1L first month</li>
+        <li>Waitlist opens now →</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA / WAITLIST -->
+<div class="cta-section" id="waitlist">
+  <div class="reveal">
+    <p class="section-label">Get in early</p>
+    <h2 class="section-title">Be part of this from day one.</h2>
+    <p>First 500 subscribers get early access to the AI doubt solver + a discount on the first cohort.</p>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom:32px;">
+      <a href="https://t.me/physicsgptofficial" class="btn btn-spark" target="_blank">→ Join Telegram</a>
+      <a href="https://youtube.com/@physicsgptofficial" class="btn btn-primary" target="_blank">Subscribe on YouTube</a>
+    </div>
+
+    <!-- Simple email form -->
+    <div style="display:flex; gap:0; max-width:420px; margin:0 auto; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--deep);">
+      <input
+        type="email"
+        placeholder="your@email.com"
+        id="email-input"
+        style="flex:1; background:transparent; border:none; padding:14px 18px; color:var(--whisper); font-family:'DM Sans',sans-serif; font-size:14px; outline:none;"
+      />
+      <button
+        onclick="handleWaitlist()"
+        style="background:var(--signal); color:#fff; border:none; padding:14px 20px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; cursor:pointer; white-space:nowrap; transition:background 0.2s;"
+        onmouseover="this.style.background='#4a44cc'"
+        onmouseout="this.style.background='var(--signal)'"
+      >Join waitlist →</button>
+    </div>
+    <p id="waitlist-msg" style="margin-top:12px; font-size:13px; color:var(--spark); display:none;">You're on the list. We'll reach out before anyone else. ✓</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo"><span>Physics</span>GPT</span>
+  <span class="footer-text">JEE · NEET · AI-Powered Physics · physicsgpt.in</span>
+  <span class="footer-text" style="font-family:'DM Mono',monospace; font-size:11px;">Building in public — March 2026</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Waitlist
+  function handleWaitlist() {
+    const email = document.getElementById('email-input').value;
+    if (!email || !email.includes('@')) {
+      document.getElementById('email-input').style.borderColor = '#ff4444';
+      return;
+    }
+    document.getElementById('waitlist-msg').style.display = 'block';
+    document.getElementById('email-input').value = '';
+  }
+</script>
+
+</body>
+</html>
