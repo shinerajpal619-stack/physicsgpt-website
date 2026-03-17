@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PhysicsGPT — JEE | NEET | AI-Powered Physics</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -31,7 +32,6 @@
     overflow-x: hidden;
   }
 
-  /* ── NOISE TEXTURE OVERLAY ── */
   body::before {
     content: '';
     position: fixed;
@@ -42,7 +42,6 @@
     opacity: 0.4;
   }
 
-  /* ── NAV ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -64,7 +63,6 @@
     letter-spacing: -0.5px;
     text-decoration: none;
   }
-
   .nav-logo span { color: var(--signal); }
 
   .nav-badge {
@@ -77,7 +75,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* ── HERO ── */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -111,7 +108,6 @@
     opacity: 0;
     animation: fadeUp 0.7s ease forwards 0.4s;
   }
-
   .hero-title .accent { color: var(--signal); }
   .hero-title .spark  { color: var(--spark); }
 
@@ -125,10 +121,8 @@
     opacity: 0;
     animation: fadeUp 0.7s ease forwards 0.6s;
   }
-
   .hero-sub strong { color: var(--whisper); font-weight: 500; }
 
-  /* ── CTA BUTTONS ── */
   .cta-group {
     display: flex;
     gap: 14px;
@@ -152,39 +146,17 @@
     cursor: pointer;
     border: none;
   }
-
-  .btn-primary {
-    background: var(--signal);
-    color: #fff;
-  }
+  .btn-primary { background: var(--signal); color: #fff; }
   .btn-primary:hover { background: var(--signal-dim); transform: translateY(-1px); }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--whisper);
-    border: 1px solid rgba(244,243,255,0.2);
-  }
+  .btn-secondary { background: transparent; color: var(--whisper); border: 1px solid rgba(244,243,255,0.2); }
   .btn-secondary:hover { border-color: rgba(244,243,255,0.5); transform: translateY(-1px); }
-
-  .btn-spark {
-    background: rgba(0,212,170,0.1);
-    color: var(--spark);
-    border: 1px solid rgba(0,212,170,0.3);
-  }
+  .btn-spark { background: rgba(0,212,170,0.1); color: var(--spark); border: 1px solid rgba(0,212,170,0.3); }
   .btn-spark:hover { background: rgba(0,212,170,0.2); transform: translateY(-1px); }
 
-  /* ── GLOW ORBS ── */
-  .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-    z-index: 0;
-  }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; }
   .orb-1 { width: 500px; height: 500px; background: rgba(108,99,255,0.12); top: -100px; left: -150px; }
   .orb-2 { width: 400px; height: 400px; background: rgba(0,212,170,0.08); bottom: 0; right: -100px; }
 
-  /* ── SECTION BASE ── */
   section {
     position: relative;
     z-index: 1;
@@ -211,16 +183,8 @@
     margin-bottom: 20px;
   }
 
-  /* ── DIVIDER ── */
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: var(--border);
-    max-width: 900px;
-    margin: 0 auto;
-  }
+  .divider { width: 100%; height: 1px; background: var(--border); max-width: 900px; margin: 0 auto; }
 
-  /* ── JOURNEY / STATUS ── */
   .status-bar {
     display: inline-flex;
     align-items: center;
@@ -231,269 +195,107 @@
     padding: 8px 14px;
     margin-bottom: 40px;
   }
-
-  .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--spark);
-    animation: pulse 2s ease infinite;
-  }
-
-  .status-text {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--spark);
-  }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--spark); animation: pulse 2s ease infinite; }
+  .status-text { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--spark); }
 
   @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.5; transform: scale(0.85); }
   }
 
-  .journey-intro {
-    font-size: 18px;
-    color: var(--muted);
-    line-height: 1.75;
-    margin-bottom: 48px;
-    font-weight: 300;
-    max-width: 700px;
-  }
+  .journey-intro { font-size: 18px; color: var(--muted); line-height: 1.75; margin-bottom: 48px; font-weight: 300; max-width: 700px; }
   .journey-intro strong { color: var(--whisper); font-weight: 500; }
 
-  /* ── TIMELINE ── */
-  .timeline {
-    position: relative;
-    padding-left: 32px;
-  }
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(to bottom, var(--signal), rgba(108,99,255,0.1)); }
+  .timeline-item { position: relative; margin-bottom: 40px; }
+  .timeline-item::before { content: ''; position: absolute; left: -28px; top: 6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--signal); background: var(--void); }
+  .timeline-item.done::before { background: var(--signal); box-shadow: 0 0 8px rgba(108,99,255,0.5); }
+  .timeline-item.now::before { background: var(--spark); border-color: var(--spark); box-shadow: 0 0 12px rgba(0,212,170,0.6); animation: pulse 2s ease infinite; }
 
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 8px; top: 8px; bottom: 8px;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--signal), rgba(108,99,255,0.1));
-  }
-
-  .timeline-item {
-    position: relative;
-    margin-bottom: 40px;
-  }
-
-  .timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -28px;
-    top: 6px;
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    border: 2px solid var(--signal);
-    background: var(--void);
-  }
-
-  .timeline-item.done::before {
-    background: var(--signal);
-    box-shadow: 0 0 8px rgba(108,99,255,0.5);
-  }
-
-  .timeline-item.now::before {
-    background: var(--spark);
-    border-color: var(--spark);
-    box-shadow: 0 0 12px rgba(0,212,170,0.6);
-    animation: pulse 2s ease infinite;
-  }
-
-  .timeline-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 4px;
-    display: inline-block;
-    margin-bottom: 8px;
-  }
-
+  .timeline-tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px; }
   .tag-done { background: rgba(108,99,255,0.15); color: var(--signal); }
   .tag-now  { background: rgba(0,212,170,0.15); color: var(--spark); }
   .tag-soon { background: rgba(244,243,255,0.06); color: var(--muted); }
 
-  .timeline-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--whisper);
-    margin-bottom: 6px;
-  }
+  .timeline-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 600; color: var(--whisper); margin-bottom: 6px; }
+  .timeline-desc { font-size: 14px; color: var(--muted); line-height: 1.6; font-weight: 300; }
 
-  .timeline-desc {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-    font-weight: 300;
-  }
-
-  /* ── ROADMAP CARDS ── */
-  .roadmap-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
-    margin-top: 40px;
-  }
-
-  .roadmap-card {
-    background: var(--deep);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    transition: border-color 0.2s;
-  }
-
+  .roadmap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 40px; }
+  .roadmap-card { background: var(--deep); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: border-color 0.2s; }
   .roadmap-card:hover { border-color: rgba(108,99,255,0.4); }
+  .roadmap-month { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--signal); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .roadmap-card h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--whisper); margin-bottom: 10px; }
+  .roadmap-card ul { list-style: none; }
+  .roadmap-card ul li { font-size: 13px; color: var(--muted); padding: 4px 0; display: flex; align-items: flex-start; gap: 8px; font-weight: 300; }
+  .roadmap-card ul li::before { content: '→'; color: var(--signal); flex-shrink: 0; font-size: 12px; margin-top: 1px; }
 
-  .roadmap-month {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--signal);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 40px; }
+  .feature-card { background: var(--deep); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.2s; }
+  .feature-card:hover { border-color: rgba(0,212,170,0.3); transform: translateY(-2px); }
+  .feature-icon { font-size: 24px; margin-bottom: 14px; }
+  .feature-card h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--whisper); margin-bottom: 8px; }
+  .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
 
-  .roadmap-card h3 {
-    font-family: 'Syne', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--whisper);
-    margin-bottom: 10px;
-  }
-
-  .roadmap-card ul {
-    list-style: none;
-  }
-
-  .roadmap-card ul li {
-    font-size: 13px;
-    color: var(--muted);
-    padding: 4px 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-weight: 300;
-  }
-
-  .roadmap-card ul li::before {
-    content: '→';
-    color: var(--signal);
-    flex-shrink: 0;
-    font-size: 12px;
-    margin-top: 1px;
-  }
-
-  /* ── WHAT WE'RE BUILDING ── */
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-top: 40px;
-  }
-
-  .feature-card {
-    background: var(--deep);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    transition: all 0.2s;
-  }
-
-  .feature-card:hover {
-    border-color: rgba(0,212,170,0.3);
-    transform: translateY(-2px);
-  }
-
-  .feature-icon {
-    font-size: 24px;
-    margin-bottom: 14px;
-  }
-
-  .feature-card h3 {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--whisper);
-    margin-bottom: 8px;
-  }
-
-  .feature-card p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.6;
-    font-weight: 300;
-  }
-
-  /* ── CTA SECTION ── */
-  .cta-section {
-    text-align: center;
-    padding: 100px 24px;
-    max-width: 700px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-
+  .cta-section { text-align: center; padding: 100px 24px; max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
   .cta-section .section-title { margin-bottom: 16px; }
+  .cta-section p { color: var(--muted); font-size: 16px; margin-bottom: 40px; font-weight: 300; }
 
-  .cta-section p {
-    color: var(--muted);
-    font-size: 16px;
-    margin-bottom: 40px;
-    font-weight: 300;
+  /* ── MAILCHIMP OVERRIDES ── */
+  #mc_embed_signup { background: transparent !important; clear: left; width: 100%; max-width: 420px; margin: 0 auto; font-family: 'DM Sans', sans-serif; }
+  #mc_embed_signup h2 { display: none; }
+  #mc_embed_signup .indicates-required { display: none; }
+  #mc_embed_signup .mc-field-group { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+  #mc_embed_signup .mc-field-group label { display: none; }
+  #mc_embed_signup .mc-field-group input[type="email"] {
+    background: var(--deep) !important;
+    border: 1px solid var(--border) !important;
+    border-right: none !important;
+    border-radius: 8px 0 0 8px !important;
+    color: var(--whisper) !important;
+    padding: 14px 18px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    width: 100% !important;
+    outline: none !important;
   }
+  #mc_embed_signup .mc-field-group input[type="email"]:focus { border-color: var(--signal) !important; }
+  #mc_embed_signup .mc-field-group input::placeholder { color: #555566 !important; }
+  #mc_embed_signup .foot { display: flex !important; margin: 0 !important; padding: 0 !important; }
+  #mc-embedded-subscribe {
+    background: var(--signal) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 0 8px 8px 0 !important;
+    padding: 14px 20px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    transition: background 0.2s !important;
+    margin: 0 !important;
+    width: auto !important;
+  }
+  #mc-embedded-subscribe:hover { background: var(--signal-dim) !important; }
+  #mc_embed_signup .optionalParent p { display: none; }
+  #mce-error-response { color: #ff6b6b; font-size: 13px; margin-top: 10px; }
+  #mce-success-response { color: var(--spark); font-size: 13px; margin-top: 10px; }
+  #mc_embed_signup_scroll > div:first-child { display: flex; }
 
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 100%;
-    position: relative;
-    z-index: 1;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .footer-logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 16px;
-    color: var(--muted);
-  }
+  footer { border-top: 1px solid var(--border); padding: 32px 40px; display: flex; align-items: center; justify-content: space-between; max-width: 100%; position: relative; z-index: 1; flex-wrap: wrap; gap: 12px; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--muted); }
   .footer-logo span { color: var(--signal); }
+  .footer-text { font-size: 13px; color: var(--muted); font-weight: 300; }
 
-  .footer-text {
-    font-size: 13px;
-    color: var(--muted);
-    font-weight: 300;
-  }
-
-  /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 
-  /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
     nav { padding: 16px 20px; }
     .hero-title { letter-spacing: -2px; }
@@ -515,91 +317,70 @@
 <div class="hero">
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
-
   <p class="hero-eyebrow">JEE &nbsp;·&nbsp; NEET &nbsp;·&nbsp; AI-Powered Physics</p>
-
   <h1 class="hero-title">
     Physics.<br>
     <span class="accent">No bullshit.</span><br>
     <span class="spark">AI-first.</span>
   </h1>
-
   <p class="hero-sub">
     We're building the <strong>smartest physics learning platform</strong> for JEE & NEET students in India — concept videos, an AI doubt solver, and a community that actually gets it.
   </p>
-
   <div class="cta-group">
-    <a href="https://t.me/physicsgptofficial" class="btn btn-spark" target="_blank">
-      → Join Telegram community
-    </a>
-    <a href="https://youtube.com/@physicsgptofficial" class="btn btn-primary" target="_blank">
-      Subscribe on YouTube
-    </a>
-    <a href="#waitlist" class="btn btn-secondary">
-      Join the waitlist
-    </a>
+    <a href="https://t.me/physicsgptofficial" class="btn btn-spark" target="_blank">→ Join Telegram community</a>
+    <a href="https://youtube.com/@physicsgptofficial" class="btn btn-primary" target="_blank">Subscribe on YouTube</a>
+    <a href="#waitlist" class="btn btn-secondary">Join the waitlist</a>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- JOURNEY SECTION -->
+<!-- JOURNEY -->
 <section id="journey">
   <div class="reveal">
     <p class="section-label">Our journey</p>
     <h2 class="section-title">We're starting from zero.<br>You can watch us build.</h2>
   </div>
-
   <div class="reveal" style="margin-top:32px;">
     <div class="status-bar">
       <div class="status-dot"></div>
       <span class="status-text">Live now — Day 0 of PhysicsGPT</span>
     </div>
-
     <p class="journey-intro">
       PhysicsGPT is being built in public — <strong>no funding, no team, no safety net.</strong> Just a clear vision, a refusal to make boring physics content, and a bet that <strong>AI-first education will change how India prepares for JEE and NEET.</strong>
     </p>
   </div>
-
-  <!-- TIMELINE -->
   <div class="timeline reveal">
-
     <div class="timeline-item done">
       <span class="timeline-tag tag-done">Done ✓</span>
       <h3 class="timeline-title">Brand & identity built</h3>
       <p class="timeline-desc">Logo, colors, YouTube banner, channel name — PhysicsGPT is a real brand now, not a side project.</p>
     </div>
-
     <div class="timeline-item done">
       <span class="timeline-tag tag-done">Done ✓</span>
       <h3 class="timeline-title">First video script written</h3>
       <p class="timeline-desc">Newton's Third Law — why 90% of JEE students get it wrong. Hook, insight, PYQ, CTA. Ready to record.</p>
     </div>
-
     <div class="timeline-item now">
       <span class="timeline-tag tag-now">Right now →</span>
       <h3 class="timeline-title">Recording begins</h3>
       <p class="timeline-desc">Ishika records video #1 this week. Dark board. S Pen. Hinglish. The way JEE physics should be taught.</p>
     </div>
-
     <div class="timeline-item">
       <span class="timeline-tag tag-soon">Coming soon</span>
       <h3 class="timeline-title">First video goes live</h3>
       <p class="timeline-desc">YouTube + Telegram + this page. Subscribe now so you don't miss it.</p>
     </div>
-
     <div class="timeline-item">
       <span class="timeline-tag tag-soon">Month 2</span>
       <h3 class="timeline-title">AI doubt solver launches</h3>
       <p class="timeline-desc">Type any JEE/NEET physics doubt. Get a step-by-step solution in Hinglish. Free tier available.</p>
     </div>
-
     <div class="timeline-item">
       <span class="timeline-tag tag-soon">Month 3</span>
       <h3 class="timeline-title">First paid cohort</h3>
       <p class="timeline-desc">Live sessions + recorded content + AI tutor. Limited seats. Waitlist opens soon.</p>
     </div>
-
   </div>
 </section>
 
@@ -611,7 +392,6 @@
     <p class="section-label">What we're building</p>
     <h2 class="section-title">More than a YouTube channel.</h2>
   </div>
-
   <div class="features-grid">
     <div class="feature-card reveal">
       <div class="feature-icon">⚡</div>
@@ -644,7 +424,6 @@
     <p class="section-label">90-day roadmap</p>
     <h2 class="section-title">Here's the plan. We're not hiding it.</h2>
   </div>
-
   <div class="roadmap-grid">
     <div class="roadmap-card reveal">
       <p class="roadmap-month">Month 1 — Foundation</p>
@@ -693,80 +472,46 @@
       <a href="https://youtube.com/@physicsgptofficial" class="btn btn-primary" target="_blank">Subscribe on YouTube</a>
     </div>
 
-   <!-- Mailchimp Signup Form - PhysicsGPT -->
-<link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
-<style>
-  #mc_embed_signup { background: transparent; clear: left; width: 100%; max-width: 420px; margin: 0 auto; font-family: 'DM Sans', sans-serif; }
-  #mc_embed_signup h2 { display: none; }
-  #mc_embed_signup .indicates-required { display: none; }
-  #mc_embed_signup .mc-field-group { margin-bottom: 0 !important; padding-bottom: 0 !important; }
-  #mc_embed_signup .mc-field-group label { display: none; }
-  #mc_embed_signup .mc-field-group input[type="email"] {
-    background: var(--deep) !important;
-    border: 1px solid var(--border) !important;
-    border-right: none !important;
-    border-radius: 8px 0 0 8px !important;
-    color: var(--whisper) !important;
-    padding: 14px 18px !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 14px !important;
-    width: 100% !important;
-    outline: none !important;
-  }
-  #mc_embed_signup .mc-field-group input[type="email"]:focus {
-    border-color: var(--signal) !important;
-  }
-  #mc_embed_signup .mc-field-group input::placeholder { color: #555566 !important; }
-  #mc_embed_signup .foot { display: flex !important; margin: 0 !important; padding: 0 !important; }
-  #mc-embedded-subscribe {
-    background: var(--signal) !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 0 8px 8px 0 !important;
-    padding: 14px 20px !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    cursor: pointer !important;
-    white-space: nowrap !important;
-    transition: background 0.2s !important;
-    margin: 0 !important;
-    width: auto !important;
-  }
-  #mc-embedded-subscribe:hover { background: var(--signal-dim) !important; }
-  #mc_embed_signup .optionalParent p { display: none; }
-  #mce-error-response { color: #ff6b6b; font-size: 13px; margin-top: 10px; }
-  #mce-success-response { color: var(--spark); font-size: 13px; margin-top: 10px; }
-  #mc_embed_signup_scroll > div:first-child { display: flex; }
-</style>
-
-<div id="mc_embed_signup">
-  <form action="https://physicsgpt.us17.list-manage.com/subscribe/post?u=10af228c913652f847ee4ceab&amp;id=f7aac35c89&amp;f_id=0023c2e1f0"
-        method="post"
-        id="mc-embedded-subscribe-form"
-        name="mc-embedded-subscribe-form"
-        class="validate"
-        target="_blank">
-    <div id="mc_embed_signup_scroll">
-      <div class="mc-field-group">
-        <label for="mce-EMAIL">Email Address</label>
-        <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="your@email.com" required>
-      </div>
-      <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none;"></div>
-        <div class="response" id="mce-success-response" style="display:none;"></div>
-      </div>
-      <div aria-hidden="true" style="position:absolute; left:-5000px;">
-        <input type="text" name="b_10af228c913652f847ee4ceab_f7aac35c89" tabindex="-1" value="">
-      </div>
-      <div class="optionalParent">
-        <div class="clear foot">
-          <input type="submit" name="subscribe" id="mc-embedded-subscribe" value="Join waitlist →">
+    <!-- Mailchimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="https://physicsgpt.us17.list-manage.com/subscribe/post?u=10af228c913652f847ee4ceab&amp;id=f7aac35c89&amp;f_id=0023c2e1f0"
+            method="post"
+            id="mc-embedded-subscribe-form"
+            name="mc-embedded-subscribe-form"
+            class="validate"
+            target="_blank">
+        <div id="mc_embed_signup_scroll">
+          <div class="mc-field-group">
+            <label for="mce-EMAIL">Email Address</label>
+            <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="your@email.com" required>
+          </div>
+          <div id="mce-responses" class="clear">
+            <div class="response" id="mce-error-response" style="display:none;"></div>
+            <div class="response" id="mce-success-response" style="display:none;"></div>
+          </div>
+          <div aria-hidden="true" style="position:absolute; left:-5000px;">
+            <input type="text" name="b_10af228c913652f847ee4ceab_f7aac35c89" tabindex="-1" value="">
+          </div>
+          <div class="optionalParent">
+            <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" value="Join waitlist →">
+            </div>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
-  </form>
+    <!-- End Mailchimp -->
+
+  </div>
 </div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo"><span>Physics</span>GPT</span>
+  <span class="footer-text">JEE · NEET · AI-Powered Physics · physicsgpt.co.in</span>
+  <span class="footer-text" style="font-family:'DM Mono',monospace; font-size:11px;">Building in public — March 2026</span>
+</footer>
+
 <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
 <script type="text/javascript">
   (function($) {
@@ -776,16 +521,7 @@
   var $mcj = jQuery.noConflict(true);
 </script>
 
-
-<!-- FOOTER -->
-<footer>
-  <span class="footer-logo"><span>Physics</span>GPT</span>
-  <span class="footer-text">JEE · NEET · AI-Powered Physics · physicsgpt.in</span>
-  <span class="footer-text" style="font-family:'DM Mono',monospace; font-size:11px;">Building in public — March 2026</span>
-</footer>
-
 <script>
-  // Scroll reveal
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -794,9 +530,8 @@
       }
     });
   }, { threshold: 0.1 });
-
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
+</script>
 
 </body>
 </html>
