@@ -2,25 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="image/png" href="/favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PhysicsGPT — JEE | NEET | AI-Powered Physics</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --void: #0A0A0F;
-    --deep: #1A1A2E;
     --signal: #6C63FF;
-    --signal-dim: #4a44cc;
+    --signal-dim: rgba(108,99,255,0.15);
     --whisper: #F4F3FF;
+    --deep: #1A1A2E;
     --spark: #00D4AA;
-    --spark-dim: #00a886;
-    --muted: #888899;
-    --border: rgba(108,99,255,0.15);
+    --spark-dim: rgba(0,212,170,0.12);
+    --muted: rgba(244,243,255,0.4);
+    --border: rgba(108,99,255,0.2);
   }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html { scroll-behavior: smooth; }
 
@@ -28,32 +26,33 @@
     background: var(--void);
     color: var(--whisper);
     font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
     overflow-x: hidden;
   }
 
+  /* NOISE TEXTURE OVERLAY */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 0;
     opacity: 0.4;
   }
 
+  /* NAV */
   nav {
     position: fixed;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    width: 100%;
     z-index: 100;
-    padding: 18px 40px;
+    padding: 20px 48px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: rgba(10,10,15,0.8);
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(12px);
   }
 
   .nav-logo {
@@ -61,21 +60,54 @@
     font-weight: 800;
     font-size: 20px;
     color: var(--whisper);
-    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo span {
+    color: var(--signal);
+  }
+
+  .atom-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--signal);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--muted);
     text-decoration: none;
-  }
-  .nav-logo span { color: var(--signal); }
-
-  .nav-badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--spark);
-    border: 1px solid rgba(0,212,170,0.3);
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.05em;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
   }
 
+  .nav-links a:hover { color: var(--whisper); }
+
+  .nav-cta {
+    background: var(--signal);
+    color: white !important;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 600 !important;
+    transition: opacity 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -85,224 +117,800 @@
     text-align: center;
     padding: 120px 24px 80px;
     position: relative;
-    z-index: 1;
+    overflow: hidden;
   }
 
-  .hero-eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: var(--spark);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: fadeUp 0.6s ease forwards 0.2s;
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
   }
 
-  .hero-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: clamp(48px, 9vw, 100px);
-    line-height: 0.95;
-    letter-spacing: -3px;
-    margin-bottom: 28px;
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards 0.4s;
-  }
-  .hero-title .accent { color: var(--signal); }
-  .hero-title .spark  { color: var(--spark); }
-
-  .hero-sub {
-    font-size: 18px;
-    color: var(--muted);
-    max-width: 560px;
-    line-height: 1.65;
-    margin-bottom: 48px;
-    font-weight: 300;
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards 0.6s;
-  }
-  .hero-sub strong { color: var(--whisper); font-weight: 500; }
-
-  .cta-group {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards 0.8s;
+  .hero-glow-2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0,212,170,0.08) 0%, transparent 70%);
+    top: 30%;
+    right: 10%;
+    pointer-events: none;
   }
 
-  .btn {
+  .hero-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 14px 26px;
-    border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    background: var(--signal-dim);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--signal);
     font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: none;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
   }
-  .btn-primary { background: var(--signal); color: #fff; }
-  .btn-primary:hover { background: var(--signal-dim); transform: translateY(-1px); }
-  .btn-secondary { background: transparent; color: var(--whisper); border: 1px solid rgba(244,243,255,0.2); }
-  .btn-secondary:hover { border-color: rgba(244,243,255,0.5); transform: translateY(-1px); }
-  .btn-spark { background: rgba(0,212,170,0.1); color: var(--spark); border: 1px solid rgba(0,212,170,0.3); }
-  .btn-spark:hover { background: rgba(0,212,170,0.2); transform: translateY(-1px); }
 
-  .orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; }
-  .orb-1 { width: 500px; height: 500px; background: rgba(108,99,255,0.12); top: -100px; left: -150px; }
-  .orb-2 { width: 400px; height: 400px; background: rgba(0,212,170,0.08); bottom: 0; right: -100px; }
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--spark);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
 
-  section {
-    position: relative;
-    z-index: 1;
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+
+  .hero h1 .accent { color: var(--signal); }
+  .hero h1 .spark { color: var(--spark); }
+
+  .hero p {
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s ease 0.3s both;
+  }
+
+  .btn-primary {
+    background: var(--signal);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 40px rgba(108,99,255,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(108,99,255,0.4);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--whisper);
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--signal);
+    background: var(--signal-dim);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 72px;
+    animation: fadeUp 0.6s ease 0.4s both;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--whisper);
+  }
+
+  .stat-num span { color: var(--signal); }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CHAT DEMO */
+  .chat-demo {
     padding: 100px 24px;
-    max-width: 900px;
-    margin: 0 auto;
+    position: relative;
   }
 
   .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: var(--signal);
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
     text-transform: uppercase;
+    color: var(--signal);
     margin-bottom: 16px;
   }
 
   .section-title {
     font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: clamp(28px, 4vw, 44px);
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 16px;
     letter-spacing: -1px;
-    line-height: 1.1;
+  }
+
+  .section-sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 18px;
+    margin-bottom: 64px;
+  }
+
+  .chat-window {
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(108,99,255,0.1);
+  }
+
+  .chat-header {
+    background: rgba(108,99,255,0.1);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .chat-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--signal);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .chat-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .chat-status {
+    font-size: 12px;
+    color: var(--spark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--spark);
+    border-radius: 50%;
+  }
+
+  .chat-messages {
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 400px;
+  }
+
+  .msg {
+    display: flex;
+    gap: 12px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .msg.user {
+    flex-direction: row-reverse;
+  }
+
+  .msg-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--signal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .msg.user .msg-avatar {
+    background: rgba(244,243,255,0.1);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--whisper);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .msg-bubble {
+    max-width: 80%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .msg.bot .msg-bubble {
+    background: rgba(108,99,255,0.12);
+    border: 1px solid rgba(108,99,255,0.2);
+    border-top-left-radius: 4px;
+  }
+
+  .msg.user .msg-bubble {
+    background: var(--signal);
+    border-top-right-radius: 4px;
+    text-align: right;
+  }
+
+  .msg-bubble .highlight {
+    color: var(--spark);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+
+  .msg-bubble strong {
+    color: var(--whisper);
+  }
+
+  .choice-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .choice-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--whisper);
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .choice-btn:hover, .choice-btn.active {
+    background: var(--signal);
+    border-color: var(--signal);
+  }
+
+  .mcq-block {
+    background: rgba(0,212,170,0.06);
+    border: 1px solid rgba(0,212,170,0.2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+
+  .mcq-title {
+    font-size: 13px;
+    color: var(--spark);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .mcq-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mcq-opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mcq-opt:hover { border-color: var(--signal); background: var(--signal-dim); }
+  .mcq-opt.correct { border-color: var(--spark); background: var(--spark-dim); }
+
+  .opt-label {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .mcq-opt.correct .opt-label { background: var(--spark); color: var(--void); }
+
+  .chat-input-bar {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .chat-input {
+    flex: 1;
+    background: rgba(244,243,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: var(--muted);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+  }
+
+  .send-btn {
+    width: 40px;
+    height: 40px;
+    background: var(--signal);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: opacity 0.2s;
+  }
+
+  .send-btn:hover { opacity: 0.85; }
+
+  /* FEATURES */
+  .features {
+    padding: 100px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 64px;
+  }
+
+  .feature-card {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .feature-card:hover {
+    border-color: var(--signal);
+    transform: translateY(-4px);
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--signal), var(--spark));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .feature-card:hover::before { opacity: 1; }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--signal-dim);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
     margin-bottom: 20px;
   }
 
-  .divider { width: 100%; height: 1px; background: var(--border); max-width: 900px; margin: 0 auto; }
+  .feature-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
 
-  .status-bar {
-    display: inline-flex;
+  .feature-card p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .feature-tag {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .tag-free { background: var(--spark-dim); color: var(--spark); }
+  .tag-pro { background: var(--signal-dim); color: var(--signal); }
+
+  /* TOOLS SECTION */
+  .tools {
+    padding: 100px 24px;
+    background: linear-gradient(180deg, transparent, rgba(108,99,255,0.03), transparent);
+  }
+
+  .tools-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 64px;
+  }
+
+  .tool-card {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card.featured {
+    border-color: var(--signal);
+    background: linear-gradient(135deg, rgba(108,99,255,0.08), var(--deep));
+  }
+
+  .tool-card.featured::after {
+    content: 'MOST USED';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--signal);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .tool-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .tool-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .tool-card p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .tool-demo {
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .tool-demo-label {
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .tool-demo-content {
+    color: var(--spark);
+    line-height: 1.8;
+  }
+
+  /* PRICING */
+  .pricing {
+    padding: 100px 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 64px;
+  }
+
+  .pricing-card {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+  }
+
+  .pricing-card.pro {
+    border-color: var(--signal);
+    background: linear-gradient(135deg, rgba(108,99,255,0.1), var(--deep));
+  }
+
+  .pricing-card.pro::before {
+    content: '⚡ MOST POPULAR';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--signal);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 16px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .plan-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .plan-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 4px;
+  }
+
+  .plan-price sup {
+    font-size: 24px;
+    vertical-align: super;
+  }
+
+  .plan-period {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+
+  .plan-features li {
+    display: flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(0,212,170,0.08);
-    border: 1px solid rgba(0,212,170,0.2);
-    border-radius: 6px;
-    padding: 8px 14px;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  .plan-features li .check {
+    color: var(--spark);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .plan-features li.active { color: var(--whisper); }
+
+  .plan-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .plan-btn.free {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--whisper);
+  }
+
+  .plan-btn.free:hover { border-color: var(--signal); }
+
+  .plan-btn.pro-btn {
+    background: var(--signal);
+    color: white;
+    box-shadow: 0 0 30px rgba(108,99,255,0.3);
+  }
+
+  .plan-btn.pro-btn:hover { box-shadow: 0 0 50px rgba(108,99,255,0.5); }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 100px 24px;
+    text-align: center;
+    position: relative;
+  }
+
+  .cta-glow {
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(108,99,255,0.15) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .cta-section p {
+    color: var(--muted);
+    font-size: 18px;
     margin-bottom: 40px;
-  }
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--spark); animation: pulse 2s ease infinite; }
-  .status-text { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--spark); }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.85); }
+    position: relative;
   }
 
-  .journey-intro { font-size: 18px; color: var(--muted); line-height: 1.75; margin-bottom: 48px; font-weight: 300; max-width: 700px; }
-  .journey-intro strong { color: var(--whisper); font-weight: 500; }
-
-  .timeline { position: relative; padding-left: 32px; }
-  .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(to bottom, var(--signal), rgba(108,99,255,0.1)); }
-  .timeline-item { position: relative; margin-bottom: 40px; }
-  .timeline-item::before { content: ''; position: absolute; left: -28px; top: 6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--signal); background: var(--void); }
-  .timeline-item.done::before { background: var(--signal); box-shadow: 0 0 8px rgba(108,99,255,0.5); }
-  .timeline-item.now::before { background: var(--spark); border-color: var(--spark); box-shadow: 0 0 12px rgba(0,212,170,0.6); animation: pulse 2s ease infinite; }
-
-  .timeline-tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px; }
-  .tag-done { background: rgba(108,99,255,0.15); color: var(--signal); }
-  .tag-now  { background: rgba(0,212,170,0.15); color: var(--spark); }
-  .tag-soon { background: rgba(244,243,255,0.06); color: var(--muted); }
-
-  .timeline-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 600; color: var(--whisper); margin-bottom: 6px; }
-  .timeline-desc { font-size: 14px; color: var(--muted); line-height: 1.6; font-weight: 300; }
-
-  .roadmap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 40px; }
-  .roadmap-card { background: var(--deep); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: border-color 0.2s; }
-  .roadmap-card:hover { border-color: rgba(108,99,255,0.4); }
-  .roadmap-month { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--signal); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
-  .roadmap-card h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--whisper); margin-bottom: 10px; }
-  .roadmap-card ul { list-style: none; }
-  .roadmap-card ul li { font-size: 13px; color: var(--muted); padding: 4px 0; display: flex; align-items: flex-start; gap: 8px; font-weight: 300; }
-  .roadmap-card ul li::before { content: '→'; color: var(--signal); flex-shrink: 0; font-size: 12px; margin-top: 1px; }
-
-  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 40px; }
-  .feature-card { background: var(--deep); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.2s; }
-  .feature-card:hover { border-color: rgba(0,212,170,0.3); transform: translateY(-2px); }
-  .feature-icon { font-size: 24px; margin-bottom: 14px; }
-  .feature-card h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--whisper); margin-bottom: 8px; }
-  .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
-
-  .cta-section { text-align: center; padding: 100px 24px; max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
-  .cta-section .section-title { margin-bottom: 16px; }
-  .cta-section p { color: var(--muted); font-size: 16px; margin-bottom: 40px; font-weight: 300; }
-
-  /* ── MAILCHIMP OVERRIDES ── */
-  #mc_embed_signup { background: transparent !important; clear: left; width: 100%; max-width: 420px; margin: 0 auto; font-family: 'DM Sans', sans-serif; }
-  #mc_embed_signup h2 { display: none; }
-  #mc_embed_signup .indicates-required { display: none; }
-  #mc_embed_signup .mc-field-group { margin-bottom: 0 !important; padding-bottom: 0 !important; }
-  #mc_embed_signup .mc-field-group label { display: none; }
-  #mc_embed_signup .mc-field-group input[type="email"] {
-    background: var(--deep) !important;
-    border: 1px solid var(--border) !important;
-    border-right: none !important;
-    border-radius: 8px 0 0 8px !important;
-    color: var(--whisper) !important;
-    padding: 14px 18px !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 14px !important;
-    width: 100% !important;
-    outline: none !important;
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 14px;
   }
-  #mc_embed_signup .mc-field-group input[type="email"]:focus { border-color: var(--signal) !important; }
-  #mc_embed_signup .mc-field-group input::placeholder { color: #555566 !important; }
-  #mc_embed_signup .foot { display: flex !important; margin: 0 !important; padding: 0 !important; }
-  #mc-embedded-subscribe {
-    background: var(--signal) !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 0 8px 8px 0 !important;
-    padding: 14px 20px !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    cursor: pointer !important;
-    white-space: nowrap !important;
-    transition: background 0.2s !important;
-    margin: 0 !important;
-    width: auto !important;
-  }
-  #mc-embedded-subscribe:hover { background: var(--signal-dim) !important; }
-  #mc_embed_signup .optionalParent p { display: none; }
-  #mce-error-response { color: #ff6b6b; font-size: 13px; margin-top: 10px; }
-  #mce-success-response { color: var(--spark); font-size: 13px; margin-top: 10px; }
-  #mc_embed_signup_scroll > div:first-child { display: flex; }
 
-  footer { border-top: 1px solid var(--border); padding: 32px 40px; display: flex; align-items: center; justify-content: space-between; max-width: 100%; position: relative; z-index: 1; flex-wrap: wrap; gap: 12px; }
-  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--muted); }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--whisper);
+  }
+
   .footer-logo span { color: var(--signal); }
-  .footer-text { font-size: 13px; color: var(--muted); font-weight: 300; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .footer-links {
+    display: flex;
+    gap: 24px;
   }
 
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
 
-  @media (max-width: 600px) {
+  .footer-links a:hover { color: var(--whisper); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--signal); border-radius: 2px; }
+
+  /* DIVIDER */
+  .divider {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 1px;
+    background: var(--border);
+  }
+
+  @media (max-width: 768px) {
     nav { padding: 16px 20px; }
-    .hero-title { letter-spacing: -2px; }
-    footer { padding: 24px 20px; }
-    .cta-group { flex-direction: column; align-items: center; }
-    .btn { width: 100%; justify-content: center; }
+    .nav-links { display: none; }
+    .tools-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 24px; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
   }
 </style>
 </head>
@@ -310,229 +918,348 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#"><span>Physics</span>GPT</a>
-  <span class="nav-badge">Day 0 → Building live</span>
+  <div class="nav-logo">
+    <div class="atom-icon">⚛️</div>
+    Physics<span>GPT</span>
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#tools">Tools</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#" class="nav-cta">Try Free →</a>
+  </div>
 </nav>
 
 <!-- HERO -->
-<div class="hero">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <p class="hero-eyebrow">JEE &nbsp;·&nbsp; NEET &nbsp;·&nbsp; AI-Powered Physics</p>
-  <h1 class="hero-title">
-    Physics.<br>
-    <span class="accent">No bullshit.</span><br>
-    <span class="spark">AI-first.</span>
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    AI-Powered · JEE & NEET Physics
+  </div>
+
+  <h1>
+    Physics ka<br>
+    <span class="accent">sabse smart</span><br>
+    <span class="spark">tutor.</span>
   </h1>
-  <p class="hero-sub">
-    We're building the <strong>smartest physics learning platform</strong> for JEE & NEET students in India — concept videos, an AI doubt solver, and a community that actually gets it.
-  </p>
-  <div class="cta-group">
-    <a href="https://t.me/physicsgptofficial" class="btn btn-spark" target="_blank">→ Join Telegram community</a>
-    <a href="https://youtube.com/@physicsgptofficial" class="btn btn-primary" target="_blank">Subscribe on YouTube</a>
-    <a href="#waitlist" class="btn btn-secondary">Join the waitlist</a>
-  </div>
-</div>
 
-<div class="divider"></div>
+  <p>Concepts that actually stick. Doubts solved in seconds. Your personal IIT-cracker — available 24/7, in Hinglish.</p>
 
-<!-- JOURNEY -->
-<section id="journey">
-  <div class="reveal">
-    <p class="section-label">Our journey</p>
-    <h2 class="section-title">We're starting from zero.<br>You can watch us build.</h2>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">
+      ⚡ Start for Free
+    </a>
+    <a href="#" class="btn-secondary">
+      Watch Demo →
+    </a>
   </div>
-  <div class="reveal" style="margin-top:32px;">
-    <div class="status-bar">
-      <div class="status-dot"></div>
-      <span class="status-text">Live now — Day 0 of PhysicsGPT</span>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">10k<span>+</span></div>
+      <div class="stat-label">Doubts Solved</div>
     </div>
-    <p class="journey-intro">
-      PhysicsGPT is being built in public — <strong>no funding, no team, no safety net.</strong> Just a clear vision, a refusal to make boring physics content, and a bet that <strong>AI-first education will change how India prepares for JEE and NEET.</strong>
-    </p>
-  </div>
-  <div class="timeline reveal">
-    <div class="timeline-item done">
-      <span class="timeline-tag tag-done">Done ✓</span>
-      <h3 class="timeline-title">Brand & identity built</h3>
-      <p class="timeline-desc">Logo, colors, YouTube banner, channel name — PhysicsGPT is a real brand now, not a side project.</p>
+    <div class="stat">
+      <div class="stat-num">JEE<span>/</span>NEET</div>
+      <div class="stat-label">Focused</div>
     </div>
-    <div class="timeline-item done">
-      <span class="timeline-tag tag-done">Done ✓</span>
-      <h3 class="timeline-title">First video script written</h3>
-      <p class="timeline-desc">Newton's Third Law — why 90% of JEE students get it wrong. Hook, insight, PYQ, CTA. Ready to record.</p>
-    </div>
-    <div class="timeline-item now">
-      <span class="timeline-tag tag-now">Right now →</span>
-      <h3 class="timeline-title">Recording begins</h3>
-      <p class="timeline-desc">Ishika records video #1 this week. Dark board. S Pen. Hinglish. The way JEE physics should be taught.</p>
-    </div>
-    <div class="timeline-item">
-      <span class="timeline-tag tag-soon">Coming soon</span>
-      <h3 class="timeline-title">First video goes live</h3>
-      <p class="timeline-desc">YouTube + Telegram + this page. Subscribe now so you don't miss it.</p>
-    </div>
-    <div class="timeline-item">
-      <span class="timeline-tag tag-soon">Month 2</span>
-      <h3 class="timeline-title">AI doubt solver launches</h3>
-      <p class="timeline-desc">Type any JEE/NEET physics doubt. Get a step-by-step solution in Hinglish. Free tier available.</p>
-    </div>
-    <div class="timeline-item">
-      <span class="timeline-tag tag-soon">Month 3</span>
-      <h3 class="timeline-title">First paid cohort</h3>
-      <p class="timeline-desc">Live sessions + recorded content + AI tutor. Limited seats. Waitlist opens soon.</p>
+    <div class="stat">
+      <div class="stat-num">24<span>/7</span></div>
+      <div class="stat-label">Available</div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<!-- CHAT DEMO -->
+<section class="chat-demo" id="demo">
+  <div class="section-label">Live Demo</div>
+  <h2 class="section-title">Physics tutor jo samjhata hai</h2>
+  <p class="section-sub">Real conversation. Real learning. Koi bakwaas nahi.</p>
 
-<!-- WHAT WE'RE BUILDING -->
-<section>
-  <div class="reveal">
-    <p class="section-label">What we're building</p>
-    <h2 class="section-title">More than a YouTube channel.</h2>
-  </div>
-  <div class="features-grid">
-    <div class="feature-card reveal">
-      <div class="feature-icon">⚡</div>
-      <h3>Concept videos</h3>
-      <p>8–10 min videos on the exact concepts that trip JEE/NEET students. No fluff. Every video = one real insight.</p>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🤖</div>
-      <h3>AI doubt solver</h3>
-      <p>Ask any physics question. Get a step-by-step solution in Hinglish, instantly. Powered by Claude AI.</p>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🎯</div>
-      <h3>PYQ breakdowns</h3>
-      <p>Past year JEE & NEET questions solved the right way — with the actual reasoning, not just the answer.</p>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🏠</div>
-      <h3>Community</h3>
-      <p>A Telegram group of serious JEE/NEET students. Daily doubts, tips, and honest advice. Zero spam.</p>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ROADMAP -->
-<section>
-  <div class="reveal">
-    <p class="section-label">90-day roadmap</p>
-    <h2 class="section-title">Here's the plan. We're not hiding it.</h2>
-  </div>
-  <div class="roadmap-grid">
-    <div class="roadmap-card reveal">
-      <p class="roadmap-month">Month 1 — Foundation</p>
-      <h3>Build the base</h3>
-      <ul>
-        <li>First 4 videos live on YouTube</li>
-        <li>Telegram community launched</li>
-        <li>physicsgpt.in goes live</li>
-        <li>Free mini-course drops</li>
-      </ul>
-    </div>
-    <div class="roadmap-card reveal">
-      <p class="roadmap-month">Month 2 — First product</p>
-      <h3>AI doubt solver</h3>
-      <ul>
-        <li>Free tier: 5 doubts/day</li>
-        <li>Paid tier: ₹299/month unlimited</li>
-        <li>12 videos on YouTube</li>
-        <li>500+ Telegram members</li>
-      </ul>
-    </div>
-    <div class="roadmap-card reveal">
-      <p class="roadmap-month">Month 3 — Revenue</p>
-      <h3>First paid cohort</h3>
-      <ul>
-        <li>Live cohort: ₹2,999–4,999</li>
-        <li>AI tutor included</li>
-        <li>Target: ₹1L first month</li>
-        <li>Waitlist opens now →</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- CTA / WAITLIST -->
-<div class="cta-section" id="waitlist">
-  <div class="reveal">
-    <p class="section-label">Get in early</p>
-    <h2 class="section-title">Be part of this from day one.</h2>
-    <p>First 500 subscribers get early access to the AI doubt solver + a discount on the first cohort.</p>
-
-    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom:32px;">
-      <a href="https://t.me/physicsgptofficial" class="btn btn-spark" target="_blank">→ Join Telegram</a>
-      <a href="https://youtube.com/@physicsgptofficial" class="btn btn-primary" target="_blank">Subscribe on YouTube</a>
+  <div class="chat-window">
+    <div class="chat-header">
+      <div class="chat-avatar">⚛️</div>
+      <div>
+        <div class="chat-name">PhysicsGPT</div>
+        <div class="chat-status"><div class="status-dot"></div> Online — JEE Mode · Hinglish</div>
+      </div>
     </div>
 
-    <!-- Mailchimp Signup Form -->
-    <div id="mc_embed_signup">
-      <form action="https://physicsgpt.us17.list-manage.com/subscribe/post?u=10af228c913652f847ee4ceab&amp;id=f7aac35c89&amp;f_id=0023c2e1f0"
-            method="post"
-            id="mc-embedded-subscribe-form"
-            name="mc-embedded-subscribe-form"
-            class="validate"
-            target="_blank">
-        <div id="mc_embed_signup_scroll">
-          <div class="mc-field-group">
-            <label for="mce-EMAIL">Email Address</label>
-            <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="your@email.com" required>
+    <div class="chat-messages">
+
+      <div class="msg bot" style="animation-delay:0.1s">
+        <div class="msg-avatar">⚛️</div>
+        <div class="msg-bubble">
+          Welcome to PhysicsGPT! 🚀 Quick setup first — which exam are you preparing for?
+          <div class="choice-buttons">
+            <button class="choice-btn active">JEE</button>
+            <button class="choice-btn">NEET</button>
           </div>
-          <div id="mce-responses" class="clear">
-            <div class="response" id="mce-error-response" style="display:none;"></div>
-            <div class="response" id="mce-success-response" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div class="msg user" style="animation-delay:0.2s">
+        <div class="msg-avatar">You</div>
+        <div class="msg-bubble">JEE</div>
+      </div>
+
+      <div class="msg bot" style="animation-delay:0.3s">
+        <div class="msg-avatar">⚛️</div>
+        <div class="msg-bubble">
+          Perfect! Which language do you prefer?
+          <div class="choice-buttons">
+            <button class="choice-btn">English</button>
+            <button class="choice-btn">Hindi</button>
+            <button class="choice-btn active">Hinglish</button>
           </div>
-          <div aria-hidden="true" style="position:absolute; left:-5000px;">
-            <input type="text" name="b_10af228c913652f847ee4ceab_f7aac35c89" tabindex="-1" value="">
-          </div>
-          <div class="optionalParent">
-            <div class="clear foot">
-              <input type="submit" name="subscribe" id="mc-embedded-subscribe" value="Join waitlist →">
+        </div>
+      </div>
+
+      <div class="msg user" style="animation-delay:0.4s">
+        <div class="msg-avatar">You</div>
+        <div class="msg-bubble">pseudo force explain karo</div>
+      </div>
+
+      <div class="msg bot" style="animation-delay:0.5s">
+        <div class="msg-avatar">⚛️</div>
+        <div class="msg-bubble">
+          <strong>⚡ Concept:</strong> Socho, bike chala rahe ho aur dum se brake maara. Aage gire na? Wohi hai pseudo force — jab tum ek accelerating frame mein ho, ek extra force feel hoti hai. Real mein exist nahi karti, bas illusion hai.<br><br>
+          <strong>📐 Formula:</strong> <span class="highlight">F_pseudo = −m × a_frame</span><br>
+          m = mass of object, a_frame = acceleration of the frame<br><br>
+          <strong>🎯 JEE Angle:</strong> JEE mein yeh lift problems, rotating frames, ya car acceleration mein aata hai. Free body diagram banao aur pseudo force ko consider karo — solve ho jayega.<br><br>
+          <strong>✅ Example:</strong> Lift upar ja rahi hai 2 m/s² se. 5 kg block ka pseudo force = −5 × 2 = −10 N (neeche ki taraf)
+
+          <div class="mcq-block">
+            <div class="mcq-title">🧠 Quick Check — Sochke batao!</div>
+            <div class="mcq-options">
+              <div class="mcq-opt">
+                <div class="opt-label">A</div>
+                Pseudo force ek real force hai
+              </div>
+              <div class="mcq-opt correct">
+                <div class="opt-label">B</div>
+                Pseudo force sirf non-inertial frames mein lagti hai ✓
+              </div>
+              <div class="mcq-opt">
+                <div class="opt-label">C</div>
+                Pseudo force ka direction acceleration ke saath same hota hai
+              </div>
+              <div class="mcq-opt">
+                <div class="opt-label">D</div>
+                Pseudo force inertial frames mein bhi kaam karti hai
+              </div>
             </div>
           </div>
         </div>
-      </form>
-    </div>
-    <!-- End Mailchimp -->
+      </div>
 
+    </div>
+
+    <div class="chat-input-bar">
+      <input class="chat-input" placeholder="Apna doubt type karo..." readonly>
+      <button class="send-btn">→</button>
+    </div>
   </div>
-</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-label">Features</div>
+  <h2 class="section-title">Sab kuch ek jagah</h2>
+  <p class="section-sub">Jo chahiye JEE/NEET crack karne ke liye — woh sab yahan hai.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>AI Doubt Solver</h3>
+      <p>Physics ka koi bhi sawaal — concept se formula tak, JEE/NEET angle ke saath. 5 seconds mein answer.</p>
+      <span class="feature-tag tag-free">FREE · 5/day</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>Formula Sheet Generator</h3>
+      <p>Chapter ka naam daalo — ek clean, exam-ready formula sheet milegi. Share karo, save karo, use karo.</p>
+      <span class="feature-tag tag-free">FREE</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <h3>PYQ Search</h3>
+      <p>Last 20 years ke JEE/NEET Physics questions — topic wise, difficulty wise. Pattern samjho, crack karo.</p>
+      <span class="feature-tag tag-free">FREE</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">❌</div>
+      <h3>Mistake Analyzer</h3>
+      <p>Wrong answer daalo — AI batayega exactly kahan aur kyun galti hui. Ek baar samjho, dobara mat karo.</p>
+      <span class="feature-tag tag-pro">PRO</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <h3>Concept Explainer</h3>
+      <p>Google replace karo. Physics ka koi bhi concept — simple language mein, relatable examples ke saath.</p>
+      <span class="feature-tag tag-free">FREE</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔥</div>
+      <h3>Daily Streak</h3>
+      <p>Har 5 sawaal pe motivation boost. Consistency track karo. IIT crack karne waale roz practice karte hain.</p>
+      <span class="feature-tag tag-pro">PRO</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOOLS SECTION -->
+<section class="tools" id="tools">
+  <div class="tools-inner">
+    <div class="section-label">AI Tools</div>
+    <h2 class="section-title">Powerful tools.<br>Simple interface.</h2>
+    <p class="section-sub">Har tool ek specific problem solve karta hai.</p>
+
+    <div class="tools-grid">
+      <div class="tool-card featured">
+        <div class="tool-number">01 / DOUBT SOLVER</div>
+        <h3>Ask anything.<br>Understand everything.</h3>
+        <p>Concept pehle, formula baad mein. Har answer mein JEE/NEET exam angle included hai.</p>
+        <div class="tool-demo">
+          <div class="tool-demo-label">Sample Output</div>
+          <div class="tool-demo-content">
+            ⚡ Concept: Ball thrown at angle...<br>
+            📐 R = u²sin2θ / g<br>
+            🎯 JEE 2022: max range at 45°<br>
+            ✅ Example: u=20m/s, θ=30°...
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-number">02 / FORMULA SHEETS</div>
+        <h3>One chapter.<br>All formulas.</h3>
+        <p>Type "Electrostatics" — get a clean, printable formula sheet instantly. Share karo group mein.</p>
+        <div class="tool-demo">
+          <div class="tool-demo-label">Sample Output</div>
+          <div class="tool-demo-content">
+            ELECTROSTATICS<br>
+            F = kq₁q₂/r² (Coulomb's)<br>
+            E = F/q (Electric field)<br>
+            V = kq/r (Potential)<br>
+            C = Q/V (Capacitance)...
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-number">03 / PYQ SEARCH</div>
+        <h3>20 years.<br>Every question.</h3>
+        <p>JEE Main + Advanced + NEET. Topic wise filter. See how a concept has been tested historically.</p>
+        <div class="tool-demo">
+          <div class="tool-demo-label">Search: "pseudo force"</div>
+          <div class="tool-demo-content">
+            JEE 2023: Rotating frame...<br>
+            JEE 2021: Lift acceleration...<br>
+            JEE 2019: Car on curved road...<br>
+            NEET 2022: Conceptual MCQ...
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-number">04 / MISTAKE ANALYZER</div>
+        <h3>Wrong answer?<br>Here's exactly why.</h3>
+        <p>Submit your wrong answer — AI diagnoses the exact misconception and how to fix it permanently.</p>
+        <div class="tool-demo">
+          <div class="tool-demo-label">Your answer: A | Correct: C</div>
+          <div class="tool-demo-content">
+            ❌ You assumed horizontal<br>
+            velocity changes with gravity.<br>
+            ✓ Gravity only acts vertically.<br>
+            Horizontal v stays constant!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label">Pricing</div>
+  <h2 class="section-title">Simple. Fair. Affordable.</h2>
+  <p class="section-sub">Coaching institute se 10x sasta. 10x zyada available.</p>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">₹<span>0</span></div>
+      <div class="plan-period">forever free</div>
+      <ul class="plan-features">
+        <li class="active"><span class="check">✓</span> 5 doubts per day</li>
+        <li class="active"><span class="check">✓</span> Formula sheet generator</li>
+        <li class="active"><span class="check">✓</span> Concept explainer</li>
+        <li class="active"><span class="check">✓</span> PYQ search (limited)</li>
+        <li><span class="check" style="color:var(--muted)">—</span> Unlimited doubts</li>
+        <li><span class="check" style="color:var(--muted)">—</span> Mistake analyzer</li>
+        <li><span class="check" style="color:var(--muted)">—</span> Progress tracking</li>
+      </ul>
+      <button class="plan-btn free">Get Started Free</button>
+    </div>
+
+    <div class="pricing-card pro">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">₹<span>299</span></div>
+      <div class="plan-period">per month · cancel anytime</div>
+      <ul class="plan-features">
+        <li class="active"><span class="check">✓</span> Unlimited doubts</li>
+        <li class="active"><span class="check">✓</span> Formula sheet generator</li>
+        <li class="active"><span class="check">✓</span> Concept explainer</li>
+        <li class="active"><span class="check">✓</span> Full PYQ database</li>
+        <li class="active"><span class="check">✓</span> Mistake analyzer</li>
+        <li class="active"><span class="check">✓</span> Progress tracking</li>
+        <li class="active"><span class="check">✓</span> Priority support</li>
+      </ul>
+      <button class="plan-btn pro-btn">Start Pro — ₹299/mo</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <h2>Ready to crack<br><span style="color:var(--signal)">JEE/NEET?</span></h2>
+  <p>10,000+ students already use PhysicsGPT. Tum kab start kar rahe ho?</p>
+  <div class="hero-actions" style="position:relative">
+    <a href="#" class="btn-primary">⚡ Start Free on Telegram</a>
+    <a href="#" class="btn-secondary">physicsgpt.co.in</a>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
-  <span class="footer-logo"><span>Physics</span>GPT</span>
-  <span class="footer-text">JEE · NEET · AI-Powered Physics · physicsgpt.co.in</span>
-  <span class="footer-text" style="font-family:'DM Mono',monospace; font-size:11px;">Building in public — March 2026</span>
+  <div class="footer-logo">Physics<span>GPT</span></div>
+  <div style="color:var(--muted); font-size:13px">JEE · NEET · AI-Powered Physics</div>
+  <div class="footer-links">
+    <a href="#">Telegram</a>
+    <a href="#">YouTube</a>
+    <a href="#">physicsgpt.co.in</a>
+  </div>
 </footer>
 
-<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
-<script type="text/javascript">
-  (function($) {
-    window.fnames = new Array(); window.ftypes = new Array();
-    fnames[0]='EMAIL'; ftypes[0]='email';
-  }(jQuery));
-  var $mcj = jQuery.noConflict(true);
-</script>
-
-<script>
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
+<!-- Botpress Webchat -->
+<script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2026/03/17/23/20260317230355-BHYC2UI6.js" defer></script>
 
 </body>
 </html>
