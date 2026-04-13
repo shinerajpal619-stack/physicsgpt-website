@@ -1261,6 +1261,425 @@
 <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
 <script src="https://files.bpcontent.cloud/2026/03/17/23/20260317230355-BHYC2UI6.js" defer></script>
 
+  <!-- PhysicsGPT Chat Widget -->
+<!-- Paste this entire block just before </body> in your index.html -->
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+#pgpt-widget * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; }
+
+#pgpt-bubble {
+  position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #6C63FF;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 24px rgba(108,99,255,0.45);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+#pgpt-bubble:hover { transform: scale(1.08); box-shadow: 0 6px 32px rgba(108,99,255,0.6); }
+#pgpt-bubble svg { width: 26px; height: 26px; }
+
+#pgpt-badge {
+  position: absolute; top: -4px; right: -4px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #00D4AA; border: 2px solid #0A0A0F;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: #0A0A0F;
+}
+
+#pgpt-window {
+  position: fixed; bottom: 96px; right: 28px; z-index: 9998;
+  width: 360px; height: 560px;
+  background: #0A0A0F;
+  border: 1px solid rgba(108,99,255,0.25);
+  border-radius: 20px;
+  display: none; flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(108,99,255,0.1);
+  animation: pgpt-slide-up 0.25s ease;
+}
+#pgpt-window.open { display: flex; }
+
+@keyframes pgpt-slide-up {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+#pgpt-header {
+  padding: 16px 18px;
+  background: #1A1A2E;
+  border-bottom: 1px solid rgba(108,99,255,0.15);
+  display: flex; align-items: center; gap: 12px;
+  flex-shrink: 0;
+}
+#pgpt-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #6C63FF;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+#pgpt-header-info { flex: 1; }
+#pgpt-header-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: #F4F3FF;
+}
+#pgpt-header-status {
+  font-size: 11px; color: #00D4AA;
+  display: flex; align-items: center; gap: 5px; margin-top: 1px;
+}
+.pgpt-status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #00D4AA;
+  animation: pgpt-pulse 2s infinite;
+}
+@keyframes pgpt-pulse {
+  0%,100% { opacity:1; } 50% { opacity:0.4; }
+}
+#pgpt-close {
+  background: none; border: none; cursor: pointer;
+  color: rgba(244,243,255,0.4); font-size: 20px; line-height: 1;
+  padding: 4px; transition: color 0.2s;
+}
+#pgpt-close:hover { color: #F4F3FF; }
+
+#pgpt-messages {
+  flex: 1; overflow-y: auto;
+  padding: 16px; display: flex;
+  flex-direction: column; gap: 12px;
+  scroll-behavior: smooth;
+}
+#pgpt-messages::-webkit-scrollbar { width: 3px; }
+#pgpt-messages::-webkit-scrollbar-thumb { background: #6C63FF; border-radius: 2px; }
+
+.pgpt-msg { display: flex; gap: 8px; align-items: flex-end; }
+.pgpt-msg.user { flex-direction: row-reverse; }
+
+.pgpt-msg-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #6C63FF; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.pgpt-msg.user .pgpt-msg-avatar {
+  background: rgba(244,243,255,0.1);
+  font-size: 11px; font-weight: 600;
+  color: #F4F3FF;
+}
+
+.pgpt-msg-bubble {
+  max-width: 78%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #F4F3FF;
+}
+.pgpt-msg.bot .pgpt-msg-bubble {
+  background: #1A1A2E;
+  border: 1px solid rgba(108,99,255,0.2);
+  border-bottom-left-radius: 4px;
+}
+.pgpt-msg.user .pgpt-msg-bubble {
+  background: #6C63FF;
+  border-bottom-right-radius: 4px;
+}
+
+.pgpt-choices {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  margin-top: 10px;
+}
+.pgpt-choice-btn {
+  background: transparent;
+  border: 1px solid rgba(108,99,255,0.4);
+  color: #F4F3FF; padding: 6px 14px;
+  border-radius: 100px; font-size: 12px;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+.pgpt-choice-btn:hover {
+  background: #6C63FF; border-color: #6C63FF;
+}
+.pgpt-choice-btn.selected {
+  background: #6C63FF; border-color: #6C63FF;
+  opacity: 0.6; cursor: default;
+}
+
+.pgpt-typing {
+  display: flex; gap: 4px;
+  align-items: center; padding: 12px 14px;
+}
+.pgpt-typing span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #6C63FF; display: block;
+  animation: pgpt-bounce 1.2s infinite;
+}
+.pgpt-typing span:nth-child(2) { animation-delay: 0.2s; }
+.pgpt-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes pgpt-bounce {
+  0%,60%,100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
+#pgpt-input-area {
+  padding: 12px 14px;
+  border-top: 1px solid rgba(108,99,255,0.15);
+  display: flex; gap: 8px; align-items: center;
+  background: #0A0A0F; flex-shrink: 0;
+}
+#pgpt-input {
+  flex: 1;
+  background: #1A1A2E;
+  border: 1px solid rgba(108,99,255,0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #F4F3FF; font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none; resize: none;
+  max-height: 80px;
+  transition: border-color 0.2s;
+}
+#pgpt-input:focus { border-color: #6C63FF; }
+#pgpt-input::placeholder { color: rgba(244,243,255,0.3); }
+#pgpt-send {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: #6C63FF; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: opacity 0.2s, transform 0.1s;
+}
+#pgpt-send:hover { opacity: 0.85; }
+#pgpt-send:active { transform: scale(0.95); }
+#pgpt-send svg { width: 16px; height: 16px; }
+
+#pgpt-tg-link {
+  text-align: center;
+  padding: 8px;
+  font-size: 11px;
+  color: rgba(244,243,255,0.3);
+  border-top: 1px solid rgba(108,99,255,0.1);
+  flex-shrink: 0;
+}
+#pgpt-tg-link a {
+  color: #6C63FF; text-decoration: none;
+}
+#pgpt-tg-link a:hover { text-decoration: underline; }
+</style>
+
+<div id="pgpt-widget">
+  <!-- Bubble -->
+  <button id="pgpt-bubble" onclick="pgptToggle()" aria-label="Open PhysicsGPT">
+    <div id="pgpt-badge">⚛</div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  </button>
+
+  <!-- Window -->
+  <div id="pgpt-window">
+    <div id="pgpt-header">
+      <div id="pgpt-avatar">⚛️</div>
+      <div id="pgpt-header-info">
+        <div id="pgpt-header-name">PhysicsGPT</div>
+        <div id="pgpt-header-status">
+          <span class="pgpt-status-dot"></span>
+          JEE · NEET · AI Tutor
+        </div>
+      </div>
+      <button id="pgpt-close" onclick="pgptToggle()">×</button>
+    </div>
+
+    <div id="pgpt-messages"></div>
+
+    <div id="pgpt-input-area">
+      <textarea id="pgpt-input" placeholder="Type your physics doubt..." rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();pgptSend()}"
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <button id="pgpt-send" onclick="pgptSend()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="pgpt-tg-link">
+      Also available on <a href="https://t.me/AskPhysicsGPTbot" target="_blank">Telegram →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const API = 'https://physicsgpt-bot.vercel.app';
+  let sessionId, examMode, language, onboardingStep = 'exam';
+  let isOpen = false, isTyping = false;
+
+  function getSession() {
+    sessionId = localStorage.getItem('pgpt_session');
+    if (!sessionId) {
+      sessionId = 'web_' + Math.random().toString(36).substr(2,9) + '_' + Date.now();
+      localStorage.setItem('pgpt_session', sessionId);
+    }
+    examMode = localStorage.getItem('pgpt_exam') || null;
+    language = localStorage.getItem('pgpt_lang') || null;
+    if (examMode && language) onboardingStep = 'done';
+  }
+
+  function scrollBottom() {
+    const m = document.getElementById('pgpt-messages');
+    setTimeout(() => m.scrollTop = m.scrollHeight, 50);
+  }
+
+  function addMsg(role, html, choices) {
+    const msgs = document.getElementById('pgpt-messages');
+    const wrap = document.createElement('div');
+    wrap.className = 'pgpt-msg ' + role;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'pgpt-msg-avatar';
+    avatar.textContent = role === 'bot' ? '⚛️' : 'You';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'pgpt-msg-bubble';
+    bubble.innerHTML = html;
+
+    if (choices) {
+      const choiceDiv = document.createElement('div');
+      choiceDiv.className = 'pgpt-choices';
+      choices.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'pgpt-choice-btn';
+        btn.textContent = c.label;
+        btn.onclick = () => {
+          choiceDiv.querySelectorAll('.pgpt-choice-btn').forEach(b => b.classList.add('selected'));
+          c.action();
+        };
+        choiceDiv.appendChild(btn);
+      });
+      bubble.appendChild(choiceDiv);
+    }
+
+    wrap.appendChild(avatar);
+    wrap.appendChild(bubble);
+    msgs.appendChild(wrap);
+    scrollBottom();
+    return bubble;
+  }
+
+  function showTyping() {
+    const msgs = document.getElementById('pgpt-messages');
+    const wrap = document.createElement('div');
+    wrap.className = 'pgpt-msg bot'; wrap.id = 'pgpt-typing-indicator';
+    const avatar = document.createElement('div');
+    avatar.className = 'pgpt-msg-avatar'; avatar.textContent = '⚛️';
+    const bubble = document.createElement('div');
+    bubble.className = 'pgpt-msg-bubble';
+    bubble.innerHTML = '<div class="pgpt-typing"><span></span><span></span><span></span></div>';
+    wrap.appendChild(avatar); wrap.appendChild(bubble);
+    msgs.appendChild(wrap); scrollBottom();
+  }
+
+  function hideTyping() {
+    const el = document.getElementById('pgpt-typing-indicator');
+    if (el) el.remove();
+  }
+
+  function startOnboarding() {
+    setTimeout(() => {
+      addMsg('bot', 'Welcome to PhysicsGPT! 🚀<br>Quick setup — which exam are you preparing for?', [
+        { label: 'JEE', action: () => selectExam('JEE') },
+        { label: 'NEET', action: () => selectExam('NEET') }
+      ]);
+    }, 400);
+  }
+
+  function selectExam(exam) {
+    examMode = exam;
+    localStorage.setItem('pgpt_exam', exam);
+    addMsg('user', exam);
+    setTimeout(() => {
+      addMsg('bot', 'Which language do you prefer?', [
+        { label: 'English', action: () => selectLang('English') },
+        { label: 'Hindi', action: () => selectLang('Hindi') },
+        { label: 'Hinglish', action: () => selectLang('Hinglish') }
+      ]);
+    }, 500);
+  }
+
+  function selectLang(lang) {
+    language = lang;
+    localStorage.setItem('pgpt_lang', lang);
+    onboardingStep = 'done';
+    addMsg('user', lang);
+    setTimeout(() => {
+      addMsg('bot', `All set! 🎯 I'm your PhysicsGPT for <strong>${examMode}</strong> in <strong>${language}</strong>.<br><br>Ask me anything — type your doubt or send a photo of your question on <a href="https://t.me/AskPhysicsGPTbot" target="_blank" style="color:#6C63FF">Telegram</a> for photo solving! 📸`);
+      document.getElementById('pgpt-input').focus();
+    }, 500);
+  }
+
+  async function sendToAPI(message) {
+    try {
+      const res = await fetch(`${API}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          message: message,
+          exam_mode: examMode || 'JEE',
+          language: language || 'Hinglish'
+        })
+      });
+      const data = await res.json();
+      return data.response || 'Kuch issue aa gaya — thodi der mein try karo!';
+    } catch(e) {
+      return 'Connection issue — please try again! 🙏';
+    }
+  }
+
+  window.pgptSend = async function() {
+    if (isTyping) return;
+    const input = document.getElementById('pgpt-input');
+    const text = input.value.trim();
+    if (!text) return;
+    if (onboardingStep !== 'done') return;
+
+    addMsg('user', text.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+    input.value = ''; input.style.height = 'auto';
+    isTyping = true; showTyping();
+
+    const response = await sendToAPI(text);
+    hideTyping(); isTyping = false;
+
+    // Format response for web
+    const formatted = response
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+    addMsg('bot', formatted);
+  };
+
+  window.pgptToggle = function() {
+    const win = document.getElementById('pgpt-window');
+    isOpen = !isOpen;
+    if (isOpen) {
+      win.classList.add('open');
+      if (document.getElementById('pgpt-messages').children.length === 0) {
+        getSession();
+        if (onboardingStep === 'done') {
+          addMsg('bot', `Welcome back! 👋 Ask me any ${examMode} Physics doubt.`);
+        } else {
+          startOnboarding();
+        }
+      }
+    } else {
+      win.classList.remove('open');
+    }
+  };
+
+  getSession();
+})();
+</script>
+  
 </body>
 </html>
 
